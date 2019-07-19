@@ -1,34 +1,32 @@
 package main
 
-import (
-	"fmt"
-)
+import "fmt"
 
 func main() {
 
-	student := Student{"lzr", 0, 0, Result{0,0}}
-	student.math, student.eng = student.result.add(student.math,student.eng)
-	fmt.Println(student)
-}
+	m := map[string]func() int{}
+	m["lzr"] = func() int {
+		return 1
+	}
+	i := m["lzr"]
+	fmt.Println(i())
 
-type Student struct {
-	name string
-	eng int
-	math int
-	result Adder
+	fmt.Println(sqlQuote(1))
 }
-type Adder interface {
-	add(eng, math int)(int, int)
+func sqlQuote(x interface{}) string {
+	switch x := x.(type) {
+	case nil:
+		return "NULL"
+	case int, uint:
+		return fmt.Sprintf("%d", x) // x has type interface{} here.
+	case bool:
+		if x {
+			return "TRUE"
+		}
+		return "FALSE"
+	case string:
+		return x // (not shown)
+	default:
+		panic(fmt.Sprintf("unexpected type %T: %v", x, x))
+	}
 }
-type Result struct {
-	eng int
-	math int
-}
-
-func (r Result) add(eng, math int)(int, int)  {
-	r.math += 100
-	r.eng += 100
-	return r.math, r.eng
-}
-
-
