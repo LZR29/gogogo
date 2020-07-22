@@ -1,0 +1,7 @@
+*.code-workspace
+.vscode
+.idea
+debug
+/log
+/.settings
+/.project
